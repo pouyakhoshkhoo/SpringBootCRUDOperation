@@ -48,11 +48,15 @@ public class CsvFileParserImpl implements CsvFileParser {
 
     @Override
     public List<CsvRecord> convertToCsvRecords(List<String[]> records) throws RecordNotFoundException {
-        if (CollectionUtils.isEmpty(records) && records.size() > 1) {
+        if (CollectionUtils.isEmpty(records) || records.size() <= 1) {
             throw new RecordNotFoundException("No record");
         }
+
+        // remove header row before converting
         records.remove(0);
-        return records.stream().map(csvDtoAssembler::makeCsvRecord)
+
+        return records.stream()
+                .map(csvDtoAssembler::makeCsvRecord)
                 .collect(Collectors.toList());
     }
 }
